@@ -1,0 +1,110 @@
+﻿@model IEnumerable<AppDev.Models.Book>
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<style>
+        h1{
+            text-align: center;     
+            padding-top: 10px;
+            color: #F3EDC8;
+        }
+
+        #addToCartBtn {
+            border: none;
+            width: 70px;
+            border: none;
+            background-color: #BF3131;
+            margin-bottom: 10px;
+            box-shadow: 0 5px 0 #7D0A0A;
+            border-radius: 4px;
+            transition: .5s;
+            margin-top: 4px;
+        }
+
+        #addToCartBtn:hover {
+            background-color: #B80000;
+            transform: translateY(1.5px);
+        }
+
+        #addToCartBtn:active {
+            box-shadow: none;
+            transform: translateY(5px);
+        }
+
+        #details a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #details {
+            width: 70px;
+            height: 36px;
+            margin-left: 13px;
+            background-color: #3887BE;
+            border: none;
+            box-shadow: 0 5px 0 #38419D;
+            border-radius: 4px;
+            transition: .5s;
+        }
+
+        #details:hover {
+            background-color: #3559E0;
+            transform: translateY(1.5px);
+        }
+
+        #details:active {
+            box-shadow: none;
+            transform: translateY(5px);
+        }
+</style>
+
+<h1>List of books</h1>
+
+<div class="row row-cols-xl-6 row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100">
+                <img src="@item.Image?.Href" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text">Price: <span class="fw-bold">&#36;@item.Price</span></p>
+                </div>
+                <div class="card-footer">
+                    <button id ="addToCartBtn" name="addToCartBtn" class="btn btn-primary px-1" onclick="addItem(@item.Id, 1)">Add</button>
+                    <button id="details"> <a asp-action="Details" asp-route-id="@item.Id">Details</a></button>
+                </div>
+            </div>
+        </div>
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Add to cart</strong>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Successfully.
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        var addButtons = document.getElementsByName('addToCartBtn')
+        var toastLiveExample = document.getElementById('liveToast')
+        if (addButtons) {
+            addButtons.forEach(function (i) {
+                i.addEventListener('click', function () {
+                    var toast = new bootstrap.Toast(toastLiveExample)
+
+                    toast.show()
+                })
+            })
+        }
+    </script>
+}
